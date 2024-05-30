@@ -527,6 +527,22 @@ describe('Serializer', function () {
       item.objects.should.eql([{number: 10, string: 'd'}]);
     });
 
+    it('should serialize number array with zeros', function () {
+      var config = {
+        hashKey: 'id',
+        schema : {
+          id : Joi.number(),
+          resolution : Joi.array().items(Joi.number()).min(2).max(2),
+        }
+      };
+
+      var s = new Schema(config);
+
+      var item = serializer.serializeItem(s, {id: 1, resolution: [0, 0]});
+
+      item.should.eql({id: 1, resolution: [0, 0]});
+    });
+
     it('should return empty when serializing null value', function () {
       var config = {
         hashKey: 'email',
